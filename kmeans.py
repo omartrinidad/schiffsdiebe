@@ -7,6 +7,18 @@ from math import sqrt
 from Tkinter import Tk, Canvas, Frame, BOTH
 from pprint import pprint
 
+
+def snake_distance(a, b):
+    """
+    Calculate the Manhattan distance of two vectors.
+    """
+    distance = 0
+    for x, y in zip(a, b):
+        distance += (x - y)
+
+    return distance
+
+
 def euclidean_distance(a, b):
     """
     Calculate the Euclidean distance of two vectors
@@ -16,6 +28,7 @@ def euclidean_distance(a, b):
         distance += (x - y) ** 2
 
     return sqrt(distance)
+
 
 class KMeans(object):
     """
@@ -32,6 +45,7 @@ class KMeans(object):
 
         # this depends on the number of columns in the dataset
         self.no_dimensions = self.dataset.shape[1]
+        self.k = k
 
         # create centroids
         centroids = np.zeros((k, self.no_dimensions))
@@ -41,21 +55,7 @@ class KMeans(object):
                 centroids[i, j] = np.random.uniform(mini, maxi)
         self.centroids = centroids
 
-        # assign each instance to closest center
-        clusters = {}
-        for i in range(k):
-            clusters[i] = []
-
-        for i, element in enumerate(self.dataset):
-            closest = []
-            for centroid in centroids:
-                closest.append(euclidean_distance(centroid, element))
-
-            # dirty code +_+
-            index = closest.index(min(closest))
-            clusters[index].append(i)
-
-        self.clusters = clusters
+        self.clusters = {}
 
         # flag variable to control the convergence
         self.convergence = False
@@ -66,8 +66,35 @@ class KMeans(object):
     def next(self):
         """
         """
-        while
+        # assign each instance to closest center
+        clusters = {}
+        for i in range(self.k):
+            clusters[i] = []
 
+        for i, element in enumerate(self.dataset):
+            closest = []
+            for centroid in self.centroids:
+                closest.append(euclidean_distance(centroid, element))
+
+            # dirty code +_+
+            index = closest.index(min(closest))
+            clusters[index].append(i)
+
+        self.clusters = clusters
+
+        # recalculate centroids
+        print 'old centroids'
+        print self.centroids
+
+        for c in self.clusters:
+            # get the sum of each column (dimension)
+            total = np.sum(self.dataset[self.clusters[c]], axis=0)
+            total = total/self.dataset[self.clusters[c]].shape[0]
+            # update the centroids
+            self.centroids[c] = total
+
+        print 'new centroids'
+        print self.centroids
 
 class Example(Frame):
 
@@ -96,7 +123,7 @@ class Example(Frame):
 
         width, height = self.w_size, self.w_size
         self.canvas.config(width=width, height=height)
-        #self.canvas.delete("all")
+        self.canvas.delete("all")
 
         min, max = -2, 10
         range_data = max - min
@@ -130,8 +157,8 @@ class Example(Frame):
 
 def main():
     root = Tk()
-    #kmeans = KMeans('iris.data', 3)
-    kmeans = KMeans('shikis.data', 3)
+    kmeans = KMeans('iris.data', 3)
+    #kmeans = KMeans('shikis.data', 3)
     ex = Example(root, 900, kmeans)
     root.mainloop()
 
