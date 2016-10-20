@@ -105,7 +105,7 @@ class KMeans(object):
 
         intersect = lambda x, y: list(set(x) & set(y))
 
-        # ToDo. Group labels in a correct way
+        # This values were given arbitrarily
         Ks = {
                 0: range(50),
                 1: range(50, 100),
@@ -298,4 +298,3 @@ if __name__ == '__main__':
     main()
     # main2 <-- Gaussian experiment
     #main2()
-
