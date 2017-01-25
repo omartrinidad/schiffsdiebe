@@ -8,6 +8,7 @@ import numpy as np
 
 class kNN(object):
     """
+    Implementation of kNN algorithm
     """
 
 

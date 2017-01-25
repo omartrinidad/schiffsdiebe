@@ -5,34 +5,43 @@ from utils.datenstruktur import Knoten
 from pprint import pprint
 
 
-class DecisionTree(object):
+class tdidt(object):
     """
     Implementation of TDIDT algorithm
     """
 
-    def __init__(self, training_ds, attibutes, node):
+    def __init__(self, dataset, node):
         """
         """
+        # training dataset
+        self.training = dataset.training
+        self.training_labels = dataset.training_labels
+
+        self.samples = self.training
+        self.attributes = dataset.attributes
+
+        # test dataset
+        self.test = dataset.test
+        self.test_labels = dataset.test_labels
+
         self.root = node
-        self.dataset = training_ds
-        self.attributes = attributes
 
 
     def __tdidt(self, samples, atts, node):
         """
         """
-        labels = training_ds[:,-1]
+        labels = self.training[:,-1]
         # first
         best_gain = ('', 0)
 
         # calculate entropy for continuous valued attributes
-        for col, sample in enumerate(training_ds.T[:-1]):
+        for col, sample in enumerate(self.training.T[:-1]):
             # node attributes[col]
             # calculate information gain for each column
-            ig = inf_gain(sample, labels)
+            ig = information_gain(sample, labels)
 
             if ig[1] > best_gain[1]:
-                best_gain = (attributes[col], ig[1])
+                best_gain = (self.attributes[col], ig[1])
 
         left_node = Knoten()
         right_node = Knoten()
@@ -48,19 +57,10 @@ class DecisionTree(object):
         training_ds: the whole matrix
         attributes: the row with the name of each column
         """
-        self.__tdidt(self.dataset, self.attributes, self.root)
+        self.__tdidt(self.samples, self.attributes, self.root)
 
 
     def test(self, test_ds):
         """
         """
         pass
-
-
-# get the X columns one by one and do the comparison with the column y
-root = Knoten()
-tree_gene_expression = DecisionTree(training_ds, attributes, root)
-tree_gene_expression.train()
-tree_gene_expression.test(test_ds)
-
-tree = DecisionTree()

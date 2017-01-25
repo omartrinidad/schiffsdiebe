@@ -1,4 +1,4 @@
-# auxiliar functions
+import numpy as np
 
 def euclidean_distance(a, b):
     """
@@ -42,7 +42,7 @@ def entropy(feature_data):
     if len(feature_data) == 0:
         return 1.02
     data_and_uniqe = np.unique(feature_data, return_inverse=True)
-    pi = bincount(data_and_uniqe[1]).astype(np.float64)
+    pi = np.bincount(data_and_uniqe[1]).astype(np.float64)
     return np.sum(- pi/len(feature_data) * np.log2(pi/len(feature_data)))
 
 

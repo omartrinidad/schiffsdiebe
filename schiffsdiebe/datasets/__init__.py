@@ -46,10 +46,17 @@ class Dataset():
             self.attributes = np.genfromtxt(
                     test_file, dtype=str,
                     delimiter=',', max_rows = 1
-                    )[:,-1:].ravel()
+                    )
         else:
             ncols = range(self.training_labels.shape[0])
             self.attributes = ["column {}".format(x) for x in ncols]
+
+
+    def dummy()
+        """
+        ToDo: It generates dummy data (an small subset to practice)
+        """
+        pass
 
 
 class Examples(object):
@@ -81,4 +88,4 @@ class Examples(object):
         training_ds = __location__ + "data/gene_expression_training.csv"
         test_ds = __location__ + "data/gene_expression_test.csv"
 
-        return Dataset(training_ds, test_ds)
+        return Dataset(training_ds, test_ds, header=True)
